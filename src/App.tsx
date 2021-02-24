@@ -1,24 +1,19 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import TestPage from "./components/pages/TestPage";
+import TopPage from "./components/pages/TopPage";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>firebaseに自動デプロイできたかな？</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/test" component={TestPage} exact />
+        <Route path="/" component={TopPage} exact />
+      </Switch>
+      <a href="/">topページへ</a>
+      <br />
+      <a href="/test">testページへ</a>
+    </Router>
   );
-}
-
+};
 export default App;
