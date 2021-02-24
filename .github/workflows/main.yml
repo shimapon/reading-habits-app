@@ -1,20 +1,24 @@
-name: Jekyll site CI
+name: CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
-  build:
-
+  FrontDeploy:
+    name: FrontDeploy
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the site in the jekyll/builder container
-      run: |
-        docker run \
-        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:latest /bin/bash -c "chmod 777 /srv/jekyll && jekyll build --future"
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+          registry-url: "https://registry.npmjs.org"
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+        # ↑ buildが違うコマンドなら、適宜変更して下さい
+      - name: deploy to Firebase Hosting
+        run: |
+          yarn deploy --token=${{ secrets.FIREBASE_TOKEN }}
